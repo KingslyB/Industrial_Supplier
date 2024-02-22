@@ -46,11 +46,14 @@
 
         sendButton.addEventListener("click", function(){
             if(subscribeCheckbox.checked){
+                event.preventDefault();
                 let newContact = new Contact(fullName.value, contactNumber.value, emailAddress.value);
                 if(newContact.serialize()){
                     console.log(newContact.FullName);
                     let key = newContact.FullName.substring(0,1) + Date.now();
                     localStorage.setItem(key, newContact.serialize());
+                    console.log( newContact);
+                    console.log("done");
                 }
             }
         })
@@ -87,8 +90,10 @@
                         </td>
                         </tr>`;
                 index++;
+                console.log(data);
+                console.log(contactList);
+                contactList.innerHTML = data;
             }
-            storageKeys.foreach()
 
         }
     }
