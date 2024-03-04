@@ -1,0 +1,17 @@
+{
+  "users":
+          [
+            {
+              "DisplayName": "John Doe",
+              "EmailAddress": "janedoe@outlook.com",
+              "Username": "janedoe",
+              "Password": "123456"
+            },
+            {
+              "DisplayName": "Admin",
+              "EmailAddress": "admin@rogers.ca",
+              "Username": "admin",
+              "Password": "password"
+            }
+          ]
+}
