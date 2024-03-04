@@ -256,11 +256,10 @@
             AjaxRequest("GET", "./data/user.json", function GetUserData(userData){
                 for (const user of JSON.parse(userData).users){
                     if (user.Username === usernameInput.value && user.Password === passwordInput.value){
-                        let foundUser = new core.User();
-                        let key = foundUser.Username.substring(0,1) + Date.now()
 
+                        let foundUser = new core.User();
                         foundUser.fromJSON(user)
-                        localStorage.setItem(key, foundUser)
+                        sessionStorage.setItem("user", foundUser)
                         successFlag = true;
                         break;
                     }
@@ -299,6 +298,18 @@
     function LoadHeader(htmlData){
         document.querySelector("header").innerHTML = htmlData;
         $(`li>a:contains(${document.title})`).addClass("active");
+        CheckLogin();
+    }
+
+    function CheckLogin(){
+        if(sessionStorage.getItem("user") != null){
+            console.dir(document.querySelector("#login"))
+            document.querySelector("#login>a").innerText =" Logout"
+            document.querySelector("#login").addEventListener("click", function LogoutFunctionality(){
+                sessionStorage.clear();
+                location.href = "login.html"
+            })
+        }
     }
 
     function Start(){
