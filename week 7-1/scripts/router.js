@@ -11,7 +11,7 @@
 
         //constructor
         constructor(){
-            this.m_activeLink = "";
+            this.ActiveLink = "";
         }
 
         //public methods

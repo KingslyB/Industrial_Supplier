@@ -285,7 +285,6 @@
         let xhr = new XMLHttpRequest()
         xhr.addEventListener("readystatechange", function() {
             if (xhr.readyState == 2 || xhr.readyState == 3){
-
                 console.log(`Communicating with ${url} at ${Date.now()}: READY STATE-${xhr.readyState} | ${xhr.status}`);
             }
             if (xhr.readyState == 4 && xhr.status == 200 && typeof callback === "function" && callback.length === 1){
@@ -298,7 +297,11 @@
     function LoadHeader(htmlData){
         document.querySelector("header").innerHTML = htmlData;
         $(`li>a:contains(${document.title})`).addClass("active");
+        document.title = capitalizeFirstCharacter(router.ActiveLink);
         CheckLogin();
+    }
+    function capitalizeFirstCharacter(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
     function CheckLogin(){
@@ -306,14 +309,33 @@
             document.querySelector("#login>a").innerText =" Logout"
             document.querySelector("#login").addEventListener("click", function LogoutFunctionality(){
                 sessionStorage.clear();
-                location.href = "login.html"
+                location.href = "/login"
             })
         }
     }
 
+    function LoadContent(){
+        let page = router.ActiveLink;
+        let callback = ActiveLinkCallback();
 
-    function ActiveLinkCallback(activeLink){
-        switch(activeLink){
+        console.log(`Page: ${page}`);
+        $.get(`/views/content/${page}.html`, function(htmlData){
+            $("main.container").html(htmlData)
+            CheckLogin()
+            callback()
+        })
+
+    }
+
+    function LoadLink(link, data = "") {
+        router.ActiveLink = link;
+
+        document.title = capitalizeFirstCharacter(router.ActiveLink);
+        LoadContent();
+    }
+
+    function ActiveLinkCallback(){
+        switch(router.ActiveLink){
             case "home" : return DisplayHomePage;
             case "about" : return DisplayHomePage;
             case "services" : return DisplayServicesPage;
@@ -333,6 +355,7 @@
     function Start(){
         console.log("App Started");
         AjaxRequest("GET", "./views/components/header.html", LoadHeader);
+        LoadLink("home");
         // let xhr = new XMLHttpRequest()
         // xhr.open("GET", "./header.html");
         // xhr.send();
