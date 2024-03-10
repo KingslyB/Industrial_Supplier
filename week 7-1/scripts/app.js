@@ -18,12 +18,12 @@
         console.log("HOME PAGE");
 
         $("#aboutUsBtn").on("click", () =>{
-            location.href = "about.html";
+            location.href = "/about";
         })
 
 
-        $("main").append(`<p id="MainParagraph" class="mt-3">This is my main paragraph</p>`);
-        $("body").append(`<article class="container"><p id="ArticleParagraph" class="mt-3">
+        $("main.container").append(`<p id="MainParagraph" class="mt-3">This is my main paragraph</p>`);
+        $("main.container").append(`<article class="container"><p id="ArticleParagraph" class="mt-3">
                             This is my article paragraph</p></article>`);
 
     }
@@ -163,14 +163,14 @@
                 index++;
                 contactList.innerHTML = data;
                 $("button.edit").on("click", function(){
-                    location.href = `edit.html#${$(this).val()}`
+                    location.href = `/edit#${$(this).val()}`
                 })
 
                 $("button.delete").on("click", function (){
 
                     if(confirm(`Are you sure you want to delete ${localStorage.getItem($(this).val()).split(",")[0]}?`)){
                         localStorage.removeItem($(this).val());
-                        location.href = "contact-list.html";
+                        location.href = "/contact-list";
                     }
                 })
 
@@ -178,7 +178,7 @@
             //console.log($("button.delete"));
         }
         $("#add-button").on("click", () =>{
-            location.href = "edit.html#add"
+            location.href = "/edit#add"
         })
     }
 
@@ -206,10 +206,10 @@
                     event.preventDefault();
                     AddContact(fullName.value, contactNumber.value, emailAddress.value);
 
-                    location.href = "contact-list.html";
+                    location.href = "/contact-list";
                 })
                 $("#cancel-button").on("click", () =>{
-                    location.href = "contact-list.html";
+                    location.href = "/contact-list";
                 })
                 break;
             default:{
@@ -229,11 +229,11 @@
                         editContact.ContactNumber = $("#contact-number").val();
 
                         localStorage.setItem(page, editContact.serialize())
-                        location.href = "contact-list.html";
+                        location.href = "/contact-list";
                     }
                 })
                 $("#cancel-button").on("click", function (){
-                    location.href = "contact-list.html"
+                    location.href = "/contact-list"
                 })
             }
             break;
@@ -284,7 +284,7 @@
     function AjaxRequest(method, url, callback){
         let xhr = new XMLHttpRequest()
         xhr.addEventListener("readystatechange", function() {
-            if (xhr.readyState == 2 || xhr.readyState == 3){
+            if (xhr.readyState == 2 || xhr.readyState == 3 || xhr.readyState == 4){
                 console.log(`Communicating with ${url} at ${Date.now()}: READY STATE-${xhr.readyState} | ${xhr.status}`);
             }
             if (xhr.readyState == 4 && xhr.status == 200 && typeof callback === "function" && callback.length === 1){
@@ -297,9 +297,42 @@
     function LoadHeader(htmlData){
         document.querySelector("header").innerHTML = htmlData;
         $(`li>a:contains(${document.title})`).addClass("active");
-        document.title = capitalizeFirstCharacter(router.ActiveLink);
         CheckLogin();
+        AddNavigationEvents();
+        console.log("Finished Loading Header")
     }
+
+    function AddNavigationEvents(){
+        let NavLinks = document.querySelectorAll("a");
+        console.log(NavLinks)
+        for(const NavLink of NavLinks){
+            NavLink.addEventListener("click", function SetLinks(){
+                event.preventDefault();
+                //console.log(NavLink.getAttribute("href"));
+                LoadLink(NavLink.getAttribute("href"));
+                history.replaceState(null, "",`${router.ActiveLink}` );
+
+            });
+        }
+    }
+
+    function AddBodyNavigationLink(){
+        let NavLinks = document.querySelectorAll("main.container a");
+        console.log(NavLinks)
+        for(const NavLink of NavLinks){
+            NavLink.addEventListener("click", function SetLinks(){
+                event.preventDefault();
+                //console.log(NavLink.getAttribute("href"));
+                LoadLink(NavLink.getAttribute("href"));
+                NavLink.removeEventListener("click", SetLinks)
+                //normally this would get rid of event.preventDefault() after one click which would be a problem.
+                //This is fine here because we are expecting links in the main body to disappear anyway
+
+                history.replaceState(null, "",`${router.ActiveLink}` );
+            });
+        }
+    }
+
     function capitalizeFirstCharacter(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
@@ -316,92 +349,79 @@
 
     function LoadContent(){
         let page = router.ActiveLink;
-        let callback = ActiveLinkCallback();
+        let pageContentsCallback = ActiveLinkCallback();
+        console.log(`Loading Content for Active Link: ${page}`);
+        console.log(pageContentsCallback)
 
-        console.log(`Page: ${page}`);
-        $.get(`/views/content/${page}.html`, function(htmlData){
+        AjaxRequest("GET", `./views/content/${page}.html`, function(htmlData){
             $("main.container").html(htmlData)
-            CheckLogin()
-            callback()
-        })
+            CheckLogin();
+            pageContentsCallback();
+            AddBodyNavigationLink()
+        });
 
     }
 
     function LoadLink(link, data = "") {
+        console.log(`pathname (activelink) before assignment: ${router.ActiveLink} `)
+        if(router.Find(link) === -1){
+            link = "/404"
+        }
         router.ActiveLink = link;
-
-        document.title = capitalizeFirstCharacter(router.ActiveLink);
+        document.title = capitalizeFirstCharacter(router.ActiveLink.slice(1));
         LoadContent();
     }
 
     function ActiveLinkCallback(){
         switch(router.ActiveLink){
-            case "home" : return DisplayHomePage;
-            case "about" : return DisplayHomePage;
-            case "services" : return DisplayServicesPage;
-            case "contact" : return DisplayEditPage;
-            case "contact-list" : return DisplayContactListPage;
-            case "products" : return DisplayProductsPage;
-            case "register" : return DisplayRegisterPage;
-            case "login" : return DisplayRegisterPage;
-            case "edit" : return DisplayEditPage;
-            //case "404" : return Display404Page;
+            case "" :
+            case "/" :
+            case "/home" : return DisplayHomePage;
+            case "/about" : return DisplayAboutUsPage;
+            case "/services" : return DisplayServicesPage;
+            case "/contact" : return DisplayContactPage;
+            case "/contact-list" : return DisplayContactListPage;
+            case "/products" : return DisplayProductsPage;
+            case "/register" : return DisplayRegisterPage;
+            case "/login" : return DisplayLoginPage;
+            case "/edit" : return DisplayEditPage;
+            case "/404" : return function (){};
             default:
-                console.log(`Callback for ${activeLink} does not exist`);
+                console.log(`Callback for ${router.ActiveLink} does not exist`);
+                return function (){};
                 break;
         }
     }
 
+    function fetchAndPromiseTestOne(){
+        let inProgressUrlRequest = fetch(new Request(`./views/content/${router.ActiveLink}.html`));
+        let urlRequestResponse;
+        let resolvedRequestData = ""
+
+        inProgressUrlRequest.then(function(urlResponse){
+            console.dir(urlResponse)
+            urlRequestResponse = urlResponse
+                .text().then(function (urlData){
+                    resolvedRequestData = urlData
+                    console.log(resolvedRequestData)
+                })
+        })
+    }
+    async function fetchAndPromiseTestTwo(){
+        let urlRequestResponse = await fetch(new Request(`./views/content/${router.ActiveLink}.html`));
+        let resolvedRequestData = await urlRequestResponse.text()
+        console.log(resolvedRequestData)
+    }
+
     function Start(){
+
         console.log("App Started");
         AjaxRequest("GET", "./views/components/header.html", LoadHeader);
-        LoadLink("home");
-        // let xhr = new XMLHttpRequest()
-        // xhr.open("GET", "./header.html");
-        // xhr.send();
-        // xhr.addEventListener("readystatechange", function (){
-        //     if (xhr.readyState == 2 || xhr.readyState == 3){
-        //
-        //         console.log(`At ${Date.now()}: READY STATE-${xhr.readyState} | ${xhr.status}`);
-        //     }
-        //     if (xhr.readyState == 4 && xhr.status == 200){
-        //         document.querySelector("header")
-        //             .innerHTML=(xhr.responseText);
-        //         $(`li>a:contains(${document.title})`).addClass("active");
-        //     }
-        // })
+        LoadLink(router.ActiveLink);
 
-        // switch(document.title){
-        //     case "Home":
-        //         DisplayHomePage();
-        //         break
-        //     case "About Us":
-        //         DisplayAboutUsPage();
-        //         break;
-        //     case "Contact":
-        //         DisplayContactPage();
-        //         break;
-        //     case "Contact List":
-        //         DisplayContactListPage();
-        //         break;
-        //     case "Products":
-        //         DisplayProductsPage();
-        //         break;
-        //     case "Services":
-        //         DisplayServicesPage();
-        //         break;
-        //     case "Edit":
-        //         DisplayEditPage();
-        //         break;
-        //     case "Register":
-        //         DisplayRegisterPage();
-        //         break;
-        //     case "Login":
-        //         DisplayLoginPage();
-        //         break;
+        fetchAndPromiseTestOne() //fetch without await
+        fetchAndPromiseTestTwo() //fetch with await
 
-
-        //}
     }
 
     window.addEventListener("load", Start)

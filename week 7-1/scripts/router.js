@@ -62,5 +62,6 @@ router.AddTable([
 let route = location.pathname;
 
 router.ActiveLink = (router.Find(route) > -1)  ?
-    (route === "/") ? "home" : route.substring(1)
-    : ("404");
+    (route === "/") ? "/home" : route //route.substring(1) cuts off the "/" from the routingtable
+    : ("/404");
+
