@@ -370,7 +370,7 @@
         console.log(`Loading Content for Active Link: ${page}`);
         console.log(pageContentsCallback)
 
-        AjaxRequest("GET", `./views/content${page}.html`, function(htmlData: string){
+        AjaxRequest("GET", `./views/content/${page}.html`, function(htmlData: string){
             $("main.container").html(htmlData)
             CheckLogin();
             pageContentsCallback();
