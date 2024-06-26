@@ -1,6 +1,10 @@
 import * as http from "http";
 import * as fs from "node:fs"
 import {IncomingMessage, ServerResponse} from "node:http";
+import express from 'express';
+const app = express();
+
+
 
 //const viewsDirectory = "/views/content";
 const indexPath = "/index.html";
@@ -8,9 +12,11 @@ const hostname = '127.0.0.1';
 const port = 3000;
 
 
+
 const server = http.createServer((req:IncomingMessage, res:ServerResponse) => {
     const originalPath  =  req.url;
     let pathToBeRead = originalPath;
+
 
 
 
