@@ -1,82 +1,90 @@
-import * as http from "http";
-import * as fs from "node:fs"
-import {IncomingMessage, ServerResponse} from "node:http";
-import express from 'express';
-import path from 'path'
-const app = express();
-const router = express.Router();
+#!/usr/bin/env node
 
-app.set('views', path.join(__dirname, "./views/"))
-app.set('view engine', 'ejs');
+/**
+ * Module dependencies.
+ */
 
-//const viewsDirectory = "/views/content";
-const hostname = '127.0.0.1';
-const port = 3000;
-app.use(router);
+import app from './app';
+var debug = require('debug')('temp:server');
+import http from 'http';
 
-//app.use("/", express.static(__dirname));
+/**
+ * Get port from environment and store in Express.
+ */
 
-router.get("/", function (req, res, next){
-    res.render('index', {title: "EJS TITLE - "})
-    //next();
-})
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
 
-app.use(express.static(path.join(__dirname, "./client/")));
-app.use(express.static(path.join(__dirname, "./node_modules/")));
+/**
+ * Create HTTP server.
+ */
 
-// app.use('/', function(req,res, next){
-//     console.log(`Request URL info: ${req.url}`)
-//     next();
-// });
-//
-// app.use('/', function(req,res, next){
-//     res.send('Hello, World!');
-// });
+var server = http.createServer(app);
 
+/**
+ * Listen on provided port, on all network interfaces.
+ */
 
-app.listen(port, function(){
-    console.log("Testing Testing Testing")
-})
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
-export default app;
+/**
+ * Normalize a port into a number, string, or false.
+ */
 
+function normalizePort(val: string) {
+  var port = parseInt(val, 10);
 
-// const server = http.createServer((req:IncomingMessage, res:ServerResponse) => {
-//     const indexPath = "/index.html";
-//     const originalPath  =  req.url;
-//     let pathToBeRead = originalPath;
-//
-//
-//
-//
-//     if(typeof originalPath === "string" && originalPath.indexOf(".css") > -1){
-//         res.setHeader('Content-Type', 'text/css');
-//     } else {
-//         res.setHeader('Content-Type', 'text/html');
-//     }
-//
-//     if (!originalPath?.includes(".") || originalPath === "/" || originalPath === "/home"){
-//         pathToBeRead = indexPath;
-//     }
-//
-//
-//     fs.readFile(__dirname + pathToBeRead, function (err, data)
-//     {
-//         if (err){
-//             res.writeHead(404);
-//             res.end("Error 404 - File Not Found " + err.message);
-//             console.log(__dirname + originalPath);
-//             return;
-//         }
-//         console.log(__dirname + originalPath);
-//         res.writeHead(200);
-//         res.end(data)
-//
-//     })
-// });
-//
-//
-// server.listen(port, hostname, () => {
-//
-//     console.log(`Server running at http://${hostname}:${port}/`);
-// });
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error: { syscall: string; code: any; }) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  let addr = server.address();
+  let bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : `port ${addr?.port}`;
+  debug('Listening on ' + bind);
+}

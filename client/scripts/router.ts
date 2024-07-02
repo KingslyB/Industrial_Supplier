@@ -5,7 +5,7 @@ namespace core {
         private m_activeLink: string;
         private m_linkData: string;
         private m_routingTable: string[];
-        //public properties
+        //client properties
 
         //constructor
         constructor() {
@@ -23,7 +23,7 @@ namespace core {
         }
 
 
-        //public methods
+        //client methods
         Add(route: string): void {
             this.m_routingTable.push(route);
         }
@@ -48,7 +48,7 @@ namespace core {
             return this.m_routingTable.toString();
         }
 
-        //public override
+        //client override
     }
 }
 

@@ -1,16 +1,1 @@
-/scripts/app.js
-/scripts/app.js.map
-/scripts/authguard.js
-/scripts/authguard.js.map
-/scripts/contact.js
-/scripts/contact.js.map
-/scripts/namespace.js
-/scripts/namespace.js.map
-/scripts/regexpatterns.js
-/scripts/regexpatterns.js.map
-/scripts/router.js
-/scripts/router.js.map
-/scripts/user.js
-/scripts/user.js.map
-/server.js
-/server.js.map
+/node_modules/

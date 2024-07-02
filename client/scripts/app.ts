@@ -278,7 +278,7 @@
                 if(successFlag) {
                     RemoveErrorFromPage(document.querySelector("#error-message") as HTMLInputElement,
                         "Failed to Login");
-                    LoadLink("/home");
+                    location.href = "/";
                 } else{
                     AddErrorToPage(document.querySelector("#error-message") as HTMLInputElement,
                         "Failed to Login");
@@ -308,45 +308,45 @@
         xhr.open(method, url);
         xhr.send();
     }
-    function LoadHeader(htmlData: string){
-        let header = document.querySelector("header") as Element;
-        header.innerHTML  = htmlData;
-        $(`li>a:contains(${document.title})`).addClass("active");
-        CheckLogin();
-        AddNavigationEvents();
-        console.log("Finished Loading Header")
-    }
+    // function LoadHeader(htmlData: string){
+    //     let header = document.querySelector("header") as Element;
+    //     header.innerHTML  = htmlData;
+    //     $(`li>a:contains(${document.title})`).addClass("active");
+    //     CheckLogin();
+    //     AddNavigationEvents();
+    //     console.log("Finished Loading Header")
+    // }
 
-    function AddNavigationEvents(){
-        let NavLinks = document.querySelectorAll("a");
-        console.log(NavLinks)
-        for(const NavLink of NavLinks){
-            NavLink.addEventListener("click", function SetLinks(event){
-                event.preventDefault();
-                //console.log(NavLink.getAttribute("href"));
-                LoadLink(NavLink.getAttribute("href") as string);
-                history.replaceState(null, "",`${router.ActiveLink}` );
+    // function AddNavigationEvents(){
+    //     let NavLinks = document.querySelectorAll("a");
+    //     console.log(NavLinks)
+    //     for(const NavLink of NavLinks){
+    //         NavLink.addEventListener("click", function SetLinks(event){
+    //             event.preventDefault();
+    //             //console.log(NavLink.getAttribute("href"));
+    //             LoadLink(NavLink.getAttribute("href") as string);
+    //             history.replaceState(null, "",`${router.ActiveLink}` );
+    //
+    //         });
+    //     }
+    // }
 
-            });
-        }
-    }
-
-    function AddBodyNavigationLink(){
-        let NavLinks = document.querySelectorAll("main.container a");
-        console.log(NavLinks)
-        for(const NavLink of NavLinks){
-            NavLink.addEventListener("click", function SetLinks(event){
-                event.preventDefault();
-                //console.log(NavLink.getAttribute("href"));
-                LoadLink(NavLink.getAttribute("href") as string);
-                NavLink.removeEventListener("click", SetLinks)
-                //normally this would get rid of event.preventDefault() after one click which would be a problem.
-                //This is fine here because we are expecting links in the main body to disappear anyway
-
-                history.replaceState(null, "",`${router.ActiveLink}` );
-            });
-        }
-    }
+    // function AddBodyNavigationLink(){
+    //     let NavLinks = document.querySelectorAll("main.container a");
+    //     console.log(NavLinks)
+    //     for(const NavLink of NavLinks){
+    //         NavLink.addEventListener("click", function SetLinks(event){
+    //             event.preventDefault();
+    //             //console.log(NavLink.getAttribute("href"));
+    //             LoadLink(NavLink.getAttribute("href") as string);
+    //             NavLink.removeEventListener("click", SetLinks)
+    //             //normally this would get rid of event.preventDefault() after one click which would be a problem.
+    //             //This is fine here because we are expecting links in the main body to disappear anyway
+    //
+    //             history.replaceState(null, "",`${router.ActiveLink}` );
+    //         });
+    //     }
+    // }
 
     function capitalizeFirstCharacter(str: string) {
         return str.charAt(0).toUpperCase() + str.slice(1);
@@ -364,51 +364,51 @@
         }
     }
 
-    function LoadContent(){
-        let page = router.ActiveLink;
-        let pageContentsCallback = ActiveLinkCallback();
-        console.log(`Loading Content for Active Link: ${page}`);
-        console.log(pageContentsCallback)
+    // function LoadContent(){
+    //     let page = router.ActiveLink;
+    //     let pageContentsCallback = ActiveLinkCallback();
+    //     console.log(`Loading Content for Active Link: ${page}`);
+    //     console.log(pageContentsCallback)
+    //
+    //     AjaxRequest("GET", `./views/content/${page}.html`, function(htmlData: string){
+    //         $("main.container").html(htmlData)
+    //         CheckLogin();
+    //         pageContentsCallback();
+    //         AddBodyNavigationLink()
+    //     });
+    //
+    // }
 
-        AjaxRequest("GET", `./views/content/${page}.html`, function(htmlData: string){
-            $("main.container").html(htmlData)
-            CheckLogin();
-            pageContentsCallback();
-            AddBodyNavigationLink()
-        });
+    // function LoadLink(link: string, data = "") {
+    //     console.log(`pathname (activelink) before assignment: ${router.ActiveLink} `)
+    //     if(router.Find(link) === -1){
+    //         link = "/404"
+    //     }
+    //     router.ActiveLink = link;
+    //     document.title = capitalizeFirstCharacter(router.ActiveLink.slice(1));
+    //     LoadContent();
+    // }
 
-    }
-
-    function LoadLink(link: string, data = "") {
-        console.log(`pathname (activelink) before assignment: ${router.ActiveLink} `)
-        if(router.Find(link) === -1){
-            link = "/404"
-        }
-        router.ActiveLink = link;
-        document.title = capitalizeFirstCharacter(router.ActiveLink.slice(1));
-        LoadContent();
-    }
-
-    function ActiveLinkCallback(){
-        switch(router.ActiveLink){
-            case "" :
-            case "/" :
-            case "/home" : return DisplayHomePage;
-            case "/about" : return DisplayAboutUsPage;
-            case "/services" : return DisplayServicesPage;
-            case "/contact" : return DisplayContactPage;
-            case "/contact-list" : return DisplayContactListPage;
-            case "/products" : return DisplayProductsPage;
-            case "/register" : return DisplayRegisterPage;
-            case "/login" : return DisplayLoginPage;
-            case "/edit" : return DisplayEditPage;
-            case "/404" : return function (){};
-            default:
-                console.log(`Callback for ${router.ActiveLink} does not exist`);
-                return function (){};
-                break;
-        }
-    }
+    // function ActiveLinkCallback(){
+    //     switch(router.ActiveLink){
+    //         case "" :
+    //         case "/" :
+    //         case "/home" : return DisplayHomePage;
+    //         case "/about" : return DisplayAboutUsPage;
+    //         case "/services" : return DisplayServicesPage;
+    //         case "/contact" : return DisplayContactPage;
+    //         case "/contact-list" : return DisplayContactListPage;
+    //         case "/products" : return DisplayProductsPage;
+    //         case "/register" : return DisplayRegisterPage;
+    //         case "/login" : return DisplayLoginPage;
+    //         case "/edit" : return DisplayEditPage;
+    //         case "/404" : return function (){};
+    //         default:
+    //             console.log(`Callback for ${router.ActiveLink} does not exist`);
+    //             return function (){};
+    //             break;
+    //     }
+    // }
 
     function fetchAndPromiseTestOne(){
         let inProgressUrlRequest = fetch(new Request(`./views/content/${router.ActiveLink}.html`));
@@ -431,13 +431,36 @@
     }
 
     function Start(){
-
         console.log("App Started");
-        AjaxRequest("GET", "./views/components/header.html", LoadHeader);
-        LoadLink(router.ActiveLink);
+        const body = document.querySelector("body");
 
-        // fetchAndPromiseTestOne() //fetch without await
-        // fetchAndPromiseTestTwo() //fetch with await
+
+        //AjaxRequest("GET", "./views/components/header.html", LoadHeader);
+        CheckLogin()
+
+
+        if (body instanceof HTMLBodyElement){
+            switch (body.getAttribute("id")){
+                case "" :
+                case "/" :
+                case "/home" : DisplayHomePage();
+                case "/about" : DisplayAboutUsPage();
+                case "/services" :  DisplayServicesPage();
+                case "/contact" :  DisplayContactPage();
+                case "/contact-list" :  DisplayContactListPage();
+                case "/products" :  DisplayProductsPage();
+                case "/register" :  DisplayRegisterPage();
+                case "/login" :  DisplayLoginPage();
+                case "/edit" :  DisplayEditPage();
+                case "/404" : DisplayHomePage();
+                default:
+                    console.log(`Callback for ${router.ActiveLink} does not exist`);
+                    DisplayHomePage();
+                    break;
+            }
+        }
+
+
 
     }
 
