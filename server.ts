@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-import app from './app';
+import app from './config/app';
 var debug = require('debug')('temp:server');
 import http from 'http';
 

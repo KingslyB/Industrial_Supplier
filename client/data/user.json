@@ -3,15 +3,21 @@
           [
             {
               "DisplayName": "John Doe",
-              "EmailAddress": "janedoe@outlook.com",
-              "Username": "janedoe",
-              "Password": "123456"
+              "EmailAddress": "johndoe@outlook.com",
+              "Username": "johndoe",
+              "Password": "password"
             },
             {
               "DisplayName": "Admin",
               "EmailAddress": "admin@rogers.ca",
               "Username": "admin",
               "Password": "password"
+            },
+            {
+              "DisplayName": "Jane Doe",
+              "EmailAddress": "janedoe@yahoo.ca",
+              "Username": "janedoe",
+              "Password": "123456"
             }
           ]
 }

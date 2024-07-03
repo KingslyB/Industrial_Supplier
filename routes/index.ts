@@ -1,4 +1,5 @@
 import express from 'express';
+import Contacts from '../models/user'
 let router = express.Router();
 
 /* GET home page. */
@@ -33,7 +34,14 @@ router.get('/edit', function(req, res, next) {
   res.render('index', { title: 'Edit Page', page: 'edit', displayName: ''  });
 });
 router.get('/contact-list', function(req, res, next) {
-  res.render('index', { title: 'List of Contacts', page: 'contact-list', displayName: '' });
+  Contacts.find().then(function(contacts){
+    console.log(`Found Documents: ${contacts}`);
+  }).catch(function(err){
+    console.log(`Failed to retrieve Contacts | ${err}`);
+    res.end()
+  })
+
+  //res.render('index', { title: 'List of Contacts', page: 'contact-list', displayName: '' });
 });
 
 export default router;
