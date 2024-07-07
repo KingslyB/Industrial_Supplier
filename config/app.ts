@@ -37,6 +37,7 @@ app.use(usersRouter);
 app.use(express.static(path.join(projectFolder, 'node_modules')));
 app.use(express.static(path.join(projectFolder, 'client')));
 
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

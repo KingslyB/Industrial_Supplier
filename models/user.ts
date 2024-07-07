@@ -1,10 +1,9 @@
 import {Schema} from "mongoose";
 import mongoose from "mongoose";
 const ContactSchema = new Schema({
-    DisplayName: String,
+    FullName: String,
     ContactNumber: String,
-    EmailAddress: String,
-    Password: String,
+    EmailAddress: String
     },
     {
     collection: "contacts"

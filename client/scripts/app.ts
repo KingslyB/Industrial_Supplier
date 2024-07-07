@@ -147,22 +147,22 @@
                 let contact = new core.Contact("","","");
 
                 contact.deserialize(contactData);
-                data += `<tr><th scope="row" class="text-center">${index}</th>
-                        <td>${contact.FullName}</td>
-                        <td>${contact.ContactNumber}</td>
-                        <td>${contact.EmailAddress}</td>
-                        
-                        <td class="text-center">
-                            <button value="${key}" class="btn btn-primary btn-sm edit">
-                                <i class="fas fa-edit fa-sm"> edit</i>
-                            </button>
-                        </td>
-                        <td class="text-center">
-                            <button value="${key}" class="btn btn-danger btn-sm delete">
-                                <i class="fas fa-edit fa-sm"> delete</i>
-                            </button>
-                        </td>
-                        </tr>`;
+                // data += `<tr><th scope="row" class="text-center">${index}</th>
+                //         <td>${contact.FullName}</td>
+                //         <td>${contact.ContactNumber}</td>
+                //         <td>${contact.EmailAddress}</td>
+                //
+                //         <td class="text-center">
+                //             <button value="${key}" class="btn btn-primary btn-sm edit">
+                //                 <i class="fas fa-edit fa-sm"> edit</i>
+                //             </button>
+                //         </td>
+                //         <td class="text-center">
+                //             <button value="${key}" class="btn btn-danger btn-sm delete">
+                //                 <i class="fas fa-edit fa-sm"> delete</i>
+                //             </button>
+                //         </td>
+                //         </tr>`;
                 index++;
                 contactList.innerHTML = data;
                 $("button.edit").on("click", function(){
@@ -431,7 +431,7 @@
     }
 
     function Start(){
-        console.log("App Started");
+        console.log(`Client-Side App Started - ${router.ActiveLink}` );
         const body = document.querySelector("body");
 
 
@@ -443,25 +443,21 @@
             switch (body.getAttribute("id")){
                 case "" :
                 case "/" :
-                case "/home" : DisplayHomePage();
-                case "/about" : DisplayAboutUsPage();
-                case "/services" :  DisplayServicesPage();
-                case "/contact" :  DisplayContactPage();
-                case "/contact-list" :  DisplayContactListPage();
-                case "/products" :  DisplayProductsPage();
-                case "/register" :  DisplayRegisterPage();
-                case "/login" :  DisplayLoginPage();
-                case "/edit" :  DisplayEditPage();
-                case "/404" : DisplayHomePage();
+                case "/home" : DisplayHomePage(); break;
+                case "/about" : DisplayAboutUsPage(); break;
+                case "/services" :  DisplayServicesPage(); break;
+                case "/contact" :  DisplayContactPage(); break;
+                //case "/contact-list" :  DisplayContactListPage();
+                case "/products" :  DisplayProductsPage(); break;
+                case "/register" :  DisplayRegisterPage(); break;
+                case "/login" :  DisplayLoginPage(); break;
+                case "/edit" :  DisplayEditPage(); break;
+                case "/404" : DisplayHomePage(); break;
                 default:
                     console.log(`Callback for ${router.ActiveLink} does not exist`);
-                    DisplayHomePage();
                     break;
             }
         }
-
-
-
     }
 
     window.addEventListener("load", Start)
