@@ -1,6 +1,7 @@
 import express from 'express';
 import Contacts from '../models/user'
-import Contact = core.Contact;
+//import Contact = core.Contact;
+//import Contact from '../client/scripts/contact';
 let router = express.Router();
 
 /* GET home page. */
@@ -46,9 +47,8 @@ router.get('/edit/:id', function(req, res, next) {
 
 router.post('/edit', function(req, res, next) {
   // let newContactToAdd = new Contact(req.body.fullName, req.body.contactNumber, req.body.emailAddress);
-  // console.log(newContactToAdd);
-  console.log(req.body);
-  res.send("CHECK console");
+  console.log();
+  res.send(req.body);
 });
 
 router.get('/contact-list', function(req, res, next) {

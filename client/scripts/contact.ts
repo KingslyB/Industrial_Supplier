@@ -1,6 +1,6 @@
-namespace core {
 
-    export class Contact {
+
+    class Contact {
 
         private m_fullName: string;
         private m_contactNumber: string;
@@ -54,4 +54,5 @@ namespace core {
 
     }
 
-}
+
+

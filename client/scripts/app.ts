@@ -1,7 +1,6 @@
 //IFFE
 
 
-
 (function(){
 
     let regExpPatterns = {
@@ -32,7 +31,7 @@
      * @param {string} emailAddress
      */
     function AddContact(fullName: string, contactNumber: string, emailAddress: string){
-        let newContact = new core.Contact(fullName, contactNumber, emailAddress);
+        let newContact = new Contact(fullName, contactNumber, emailAddress);
         if(newContact.serialize()){
             console.log(newContact.FullName);
             let key = newContact.FullName.substring(0,1) + Date.now();
@@ -144,7 +143,7 @@
             let index = 1;
             for (const key of keys) {
                 let contactData = localStorage.getItem(key) as string;
-                let contact = new core.Contact("","","");
+                let contact = new Contact("","","");
 
                 contact.deserialize(contactData);
                 // data += `<tr><th scope="row" class="text-center">${index}</th>
@@ -219,7 +218,7 @@
                 })
                 break;
             default:{
-                let editContact = new core.Contact("","","")
+                let editContact = new Contact("","","")
                 console.log(page);
                 editContact.deserialize(localStorage.getItem(page) as string)
 
